@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -10,106 +11,109 @@ public class BankTest {
     @Test
     public void shouldPayIntoAccount() {
         //given
-        AccountOwner accountOwner1 = new AccountOwner("Jan", "Kowalski", "1234");
-        BankAccount bankkAccount1 = new BankAccount(accountOwner1, 10000);
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        BankAccount bankAccount = new BankAccount(10000,accountOwner);
         //when
-        bankkAccount1.payIntoAccount(1000);
+        bankAccount.payIntoAccount(3000);
         //then
-        assertTrue(bankkAccount1.getBalance() == 11000);
+        assertTrue(bankAccount.getBalance() == 13000);
     }
 
     @Test
-    public void shouldHaveCorrectPinNmber() {
+    public void shouldPayIntoPremiumAccount() {
         //given
-        AccountOwner accountOwner1 = new AccountOwner("Jan", "Kowalski", "1234");
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        PremiumAccount premiumAccount = new PremiumAccount(21000,accountOwner,-7000);
         //when
-
+        premiumAccount.payIntoAccount(3000);
         //then
-        assertTrue(accountOwner1.getPIN().equals("1234"));
+        assertTrue(premiumAccount.getBalance() == 24000);
     }
 
     @Test
     public void shouldWithdrawalFromAccount() {
         //given
-        AccountOwner accountOwner1 = new AccountOwner("Jan", "Kowalski", "1234");
-        BankAccount bankkAccount1 = new BankAccount(accountOwner1, 10000);
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        BankAccount bankkAccount = new BankAccount(10000, accountOwner);
         //when
-        bankkAccount1.withdrawalFromAccount(19000);
+        bankkAccount.withdrawalFromAccount(9000);
         //then
-        assertTrue(bankkAccount1.getBalance() > 0);
+        assertTrue(bankkAccount.getBalance() == 1000);
     }
 
     @Test
-    public void shouldTransferBetweenAccounts1() {
+    public void shouldTransferBetweenAccounts() {
         //given
-        AccountOwner accountOwner2 = new AccountOwner("Jan", "Kowalski", "1234");
-        AccountOwner accountOwner3 = new AccountOwner("Zenon", "Nowak", "5678");
-        BankAccount bankAccount2 = new BankAccount(accountOwner2, 10000);
-        BankAccount bankAccount3 = new BankAccount(accountOwner3, 10000);
+        AccountOwner accountOwner1 = new AccountOwner("Jan", "Kowalski", "1234");
+        AccountOwner accountOwner2 = new AccountOwner("Zenon", "Nowak", "5678");
+        BankAccount bankAccount = new BankAccount(12000, accountOwner1);
+        PremiumAccount premiumAccount = new PremiumAccount(20000, accountOwner2,-5000);
         //when
-        bankAccount2.transfer(bankAccount3, 5000);
+        bankAccount.transfer(premiumAccount, 5000);
         //then
-        assertTrue(bankAccount2.getBalance() < bankAccount3.getBalance());
+        assertTrue(bankAccount.getBalance() == 7000 && premiumAccount.getBalance() == 25000);
     }
 
     @Test
     public void shouldTransferBetweenAccounts2() {
         //given
-        AccountOwner accountOwner2 = new AccountOwner("Jan", "Kowalski", "1234");
-        AccountOwner accountOwner3 = new AccountOwner("Zenon", "Nowak", "5678");
-        BankAccount bankAccount2 = new BankAccount(accountOwner2, 10000);
-        BankAccount bankAccount3 = new BankAccount(accountOwner3, 10000);
+        AccountOwner accountOwner1 = new AccountOwner("Jan", "Kowalski", "1234");
+        AccountOwner accountOwner2 = new AccountOwner("Zenon", "Nowak", "5678");
+        BankAccount bankAccount1 = new BankAccount(12000, accountOwner1);
+        BankAccount bankAccount2 = new BankAccount(3000, accountOwner2);
+
         //when
-        bankAccount2.transfer(bankAccount3, 15000);
+        bankAccount1.transfer(bankAccount2, 9000);
         //then
-        assertTrue(bankAccount2.getBalance() == bankAccount3.getBalance());
+        assertTrue(bankAccount1.getBalance() == 3000 && bankAccount2.getBalance() == 12000);
     }
 
     @Test
-    public void shouldTakeCredit1(){
+    public void shouldTakeCredit(){
         //given
-        AccountOwner accountOwner4 = new AccountOwner("Jan", "Kowalski", "1234");
-        BankAccount bankAccount4 = new BankAccount(accountOwner4, 10000);
-        BankCredit bankCredit = new BankCredit(bankAccount4, 5000,3,48);
-        //when
-        bankCredit.repaymentBankCredit();
-        //then
-        assertTrue(bankAccount4.getBalance()>bankCredit.getAmountOfCredit());
-
-    }
-
-    @Test
-    public void shouldTakeCredit2(){
-        //given
-        AccountOwner accountOwner4 = new AccountOwner("Jan", "Kowalski", "1234");
-        BankAccount bankAccount4 = new BankAccount(accountOwner4, 10000);
-        BankCredit bankCredit = new BankCredit(bankAccount4, 15000,3,48);
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        BankAccount bankAccount = new BankAccount(10000, accountOwner);
+        BankCredit bankCredit = new BankCredit(bankAccount, 5000,3,48);
         //when
         bankCredit.repaymentBankCredit();
         //then
-        assertTrue(bankAccount4.getBalance()<bankCredit.getAmountOfCredit());
+        assertTrue(bankAccount.getBalance() == 4850);
 
     }
 
     @Test
-    public void shouldTakeNoMoreThanMaxDebet1(){
+    public void shouldNoTakeMoreCreditThanAccountBalance(){
         //given
-        AccountOwner accountOwner5 = new AccountOwner("Jan", "Kowalski", "1234");
-        PremiumAccount premiumAccount = new PremiumAccount(accountOwner5,10000,-5000);
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        BankAccount bankAccount = new BankAccount(10000, accountOwner);
+        BankCredit bankCredit = new BankCredit(bankAccount, 15000,3,48);
+        //when
+        bankCredit.repaymentBankCredit();
+        //then
+        assertTrue(bankAccount.getBalance() == 10000);
+
+    }
+
+    @Test
+    public void shouldTakeDebet(){
+        //given
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        PremiumAccount premiumAccount = new PremiumAccount(10000, accountOwner, -5000);
         //when
         premiumAccount.takeDebet(14000);
         //then
-        assertTrue(premiumAccount.getBalance()>premiumAccount.getMaxDebet());
+        assertTrue(premiumAccount.getBalance() == -4000);
     }
     @Test
-    public void shouldTakeNoMoreThanMaxDebet2(){
+    public void shouldTakeNoMoreThanMaxDebet(){
         //given
-        AccountOwner accountOwner5 = new AccountOwner("Jan", "Kowalski", "1234");
-        PremiumAccount premiumAccount = new PremiumAccount(accountOwner5,10000,-5000);
+        AccountOwner accountOwner = new AccountOwner("Jan", "Kowalski", "1234");
+        PremiumAccount premiumAccount = new PremiumAccount(10000, accountOwner, -5000);
         //when
         premiumAccount.takeDebet(16000);
         //then
-        assertTrue(premiumAccount.getBalance()>premiumAccount.getMaxDebet());
+        assertTrue(premiumAccount.getBalance() == 10000);
     }
+
 }
 

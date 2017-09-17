@@ -1,61 +1,36 @@
 /**
  * Created by HP on 2017-09-11.
  */
-public class BankAccount {
+public class BankAccount extends Bank{
 
     private AccountOwner accountOwner;
-    private int balance;
 
-    public BankAccount(AccountOwner accountOwner, int balance) {
+    public BankAccount(int balance, AccountOwner accountOwner) {
+        super(balance);
         this.accountOwner = accountOwner;
-        this.balance = balance;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
-        this.balance = balance;
     }
 
     public AccountOwner getAccountOwner() {
         return accountOwner;
     }
 
+    public void setAccountOwner(AccountOwner accountOwner) {
+        this.accountOwner = accountOwner;
+    }
 
+    @Override
     public void payIntoAccount(int howMuch) {
-
-        balance += howMuch;
-        System.out.println("Wplaciles " + howMuch + " PLN. Twój stan konta wynosi " + getBalance());
+        super.payIntoAccount(howMuch);
     }
 
+    @Override
     public void withdrawalFromAccount(int howMuch) {
-        while (true)
-            if (balance < howMuch) {
-                System.out.println("Masz za mało pieniędzy na wypłatę " + howMuch + " PLN. Możesz wypłacić nie więcej niż " + balance + " PLN.");
-                break;
-            }
-            else {
-                setBalance(getBalance() - howMuch);
-                System.out.println("Wyplaciles " + howMuch + " PLN z konta. Pozostało Ci " + balance + " PLN.");
-            }
+        super.withdrawalFromAccount(howMuch);
     }
 
-    public void transfer(BankAccount bankAccount, int howMuch){
-
-
-            if (balance < howMuch) {
-                System.out.println("Masz za mało pieniędzy na transfer " + howMuch + " PLN. Możesz dokonac transferu na nie więcej niż " + balance + " PLN.");
-
-            }
-            else{
-                setBalance(getBalance()-howMuch);
-                bankAccount.setBalance(bankAccount.getBalance() + howMuch);
-                System.out.println("Przelales na konto " + bankAccount.getAccountOwner().toString() + " " + howMuch + " PLN. Na koncie pozostało Ci " + balance + " PLN.");
-                System.out.println("Na koncie " + bankAccount.getAccountOwner().toString() + " jest obecnie " + bankAccount.getBalance() + " PLN.");
-            }
-        }
-
+    @Override
+    public void transfer(Bank bank, int howMuch) {
+        super.transfer(bank, howMuch);
+    }
     }
 

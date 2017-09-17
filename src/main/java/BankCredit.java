@@ -1,12 +1,13 @@
 /**
  * Created by HP on 2017-09-12.
  */
-public class BankCredit {
+public class BankCredit{
 
     private BankAccount bankAccount;
     private int amountOfCredit;
     private int loanInterestRate;
     private int repaymentPeriod;
+
 
     public BankCredit(BankAccount bankAccount, int amountOfCredit, int loanInterestRate, int repaymentPeriod) {
         this.bankAccount = bankAccount;
@@ -14,7 +15,6 @@ public class BankCredit {
         this.loanInterestRate = loanInterestRate;
         this.repaymentPeriod = repaymentPeriod;
     }
-
 
     public int getAmountOfCredit() {
         return amountOfCredit;
@@ -38,21 +38,10 @@ public class BankCredit {
             double valueOfMonthlyRate = (amountOfCredit + (amountOfCredit * ((double) loanInterestRate / 100))) / repaymentPeriod;
             System.out.println("Wysokość pojedynczej raty wyniesie " + valueOfMonthlyRate + " PLN.");
 
-            int numberOfYearsToRepaymment = repaymentPeriod / 12;
-            int numberOfPaymentInOneYear = 12;
-            double sumOfYearPayment = 0;
+            double sumToRepayment = valueOfMonthlyRate * repaymentPeriod;
 
-            for (int i = 1; i < numberOfYearsToRepaymment + 1; i++) {
-                double sumOfMonthlyPayment = 0;
-                for (int j = 0; j < numberOfPaymentInOneYear; j++) {
-                    sumOfMonthlyPayment += valueOfMonthlyRate;
-
-                }
-                sumOfYearPayment += sumOfMonthlyPayment;
-                System.out.println("Suma spłaconego kredytu po " + i + " roku wynosi " + sumOfYearPayment + " PLN.");
-            }
-            double moneyLeftAfterCreditRepayment = bankAccount.getBalance() - sumOfYearPayment;
-            System.out.println("Kwota na koncie po splacie kredytu wynosi " + moneyLeftAfterCreditRepayment + " PLN.");
+            bankAccount.setBalance(bankAccount.getBalance() - (int) sumToRepayment);
+            System.out.println("Kwota na koncie po splacie kredytu wynosi " + bankAccount.getBalance() + " PLN.");
 
         }
     }
