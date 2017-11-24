@@ -1,6 +1,5 @@
-/**
- * Created by HP on 2017-09-11.
- */
+package model;
+
 public class AccountOwner {
 
     private String name;
@@ -13,21 +12,9 @@ public class AccountOwner {
         this.PIN = PIN;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getPIN() {
-        return PIN;
-    }
-
     @Override
     public String toString() {
-        return "AccountOwner{" +
+        return "model.AccountOwner{" +
                 "name='" + name + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", PIN='" + "****" + '\'' +
